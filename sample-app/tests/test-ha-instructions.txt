@@ -1,0 +1,58 @@
+================================================================================
+Test: Zero-Downtime High Availability
+================================================================================
+
+This test demonstrates CloudNativePG's automatic failover and self-healing.
+Validates that the 3-node cluster can handle pod failures without data loss.
+
+SETUP:
+------
+You need 2 terminal windows open.
+
+TERMINAL 1 - Continuous Query Monitor:
+---------------------------------------
+Run this command (it will query the database every second):
+This shows query availability during failure scenarios.
+
+while true; do
+  kubectl exec timescaledb-cluster-1 -n timescaledb -- \
+    psql -U postgres -d app -tAc "SELECT NOW(), COUNT(*) FROM pattern_embeddings" 2>/dev/null || echo "Query failed"
+  sleep 1
+done
+
+
+TERMINAL 2 - Chaos Engineering:
+--------------------------------
+Once Terminal 1 is running, execute these commands to test HA:
+
+# Test 1: Delete a replica pod (non-primary)
+kubectl delete pod timescaledb-cluster-2 -n timescaledb
+
+# Observe Terminal 1: Queries should continue WITHOUT interruption ✅
+# The pod will automatically recreate ✅
+
+# Wait 30 seconds for pod to fully recover
+
+# Test 2: Delete the primary pod (more aggressive test)
+kubectl delete pod timescaledb-cluster-1 -n timescaledb
+
+# Observe Terminal 1: Brief interruption (<5s), then automatically reconnects ✅
+# CloudNativePG promotes a replica to primary ✅
+
+
+EXPECTED RESULTS:
+-----------------
+✅ Queries continue during replica failure (no impact)
+✅ Queries resume within 5 seconds during primary failure
+✅ Pods automatically recreate (self-healing)
+✅ Data remains consistent across all replicas
+
+WHAT THIS PROVES:
+-----------------
+✅ CloudNativePG provides production-grade HA
+✅ Zero-downtime for replica failures
+✅ Minimal downtime (<5s) for primary failures
+✅ Automatic recovery without manual intervention
+✅ Suitable for Kubernetes production deployments
+
+================================================================================

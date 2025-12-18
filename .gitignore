@@ -1,0 +1,95 @@
+# =============================================================================
+# .gitignore for TimescaleDB + pgvectorscale on Kubernetes
+# =============================================================================
+
+# Test Results and Logs
+test-results-*.txt
+*.log
+logs/
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.env.local
+*.sublime-project
+*.sublime-workspace
+
+# Docker Build Artifacts
+docker/build/
+*.tar
+*.tar.gz
+
+# Kubernetes Manifests with Secrets
+# Note: Keep manifests in git, but exclude any with hardcoded secrets
+kubernetes/secrets/
+kubernetes/*-secret.yaml
+kubernetes/*-secrets.yaml
+
+# Temporary Files
+*.tmp
+*.temp
+*.bak
+.tmp/
+temp/
+
+# Python Cache (if any Python scripts are added)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+
+# Node Modules (if any Node scripts are added)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Bash History
+.bash_history
+.zsh_history
+
+# OS-specific Files
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Local Configuration Files
+.env
+.env.*.local
+config.local.*
+
+# Generated Files (if any)
+dist/
+build/
+*.generated.*
+
+# Database Dumps and Backups
+*.sql.bak
+*.sql.gz
+db_backup/
+backups/
+
+# Cluster-specific Files
+kubeconfig
+kubeconfig-*
+.kubeconfig
+
+# Performance Test Artifacts
+benchmark_results/
+performance_logs/
+
+# =============================================================================
+# Important: DO NOT ignore these files
+# =============================================================================
+# - kubernetes/*.yaml (keep all manifests in git)
+# - docker/Dockerfile (keep build configuration in git)
+# - sample-app/*.sql (keep all SQL scripts in git)
+# - README.md and documentation (keep in git)
+# - run-capability-tests.sh (keep test orchestrator in git)

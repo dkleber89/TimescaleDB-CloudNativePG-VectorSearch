@@ -1,0 +1,46 @@
+# CloudNativePG ImageCatalog for TimescaleDB + pgvector + pgvectorscale
+# Defines available PostgreSQL images for cluster provisioning.
+# Images must be built from the Dockerfile and pushed to a container registry.
+apiVersion: postgresql.cnpg.io/v1
+kind: ImageCatalog
+metadata:
+  # Catalog name referenced by Cluster resources (see cluster-timescaledb.yaml)
+  # ⚠️  IMPORTANT: If you change "timescale-ai here, you MUST also update the matching name in cluster-timescaledb.yaml
+  # Both files must use the same catalog name for the cluster to find the image definition
+  name: timescale-ai
+  namespace: timescaledb
+spec:
+  images:
+    # PostgreSQL 17 image with TimescaleDB, pgvector, and pgvectorscale extensions
+    # Built from docker/Dockerfile with all three extensions pre-compiled
+  - major: 17
+    # Container image reference: REGISTRY/IMAGE_NAME:IMAGE_TAG
+    # Examples:
+    #   Docker Hub:              docker.io/myusername/timescaledb-pgvector:pg17-latest
+    #   GitHub Container Registry: ghcr.io/myusername/timescaledb-pgvector:pg17-latest
+    # Replace REGISTRY with your container registry URL
+    # Replace IMAGE_NAME with your image repository name
+    # Replace IMAGE_TAG with your image tag (e.g., pg17-latest, pg17-v1.0.0)
+    # ⚠️  IMPORTANT: Replace REGISTRY/IMAGE_NAME:IMAGE_TAG before applying this manifest
+    image: REGISTRY/IMAGE_NAME:IMAGE_TAG
+
+  # =============================================================================
+  # Optional: Add additional PostgreSQL versions to the catalog
+  # =============================================================================
+  # ⚠️  DISCLAIMER: This tutorial has only been tested with PostgreSQL 17.
+  # Additional versions may work but are not officially validated.
+  #
+  # To add support for another PostgreSQL version:
+  # 1. Build a custom image with the desired PG_MAJOR version (see docker/Dockerfile)
+  # 2. Push the image to your container registry
+  # 3. Uncomment and configure the section below
+  # 4. Update cluster-timescaledb.yaml to reference the new major version
+  #
+  # - major: XX
+  #   # PostgreSQL XX image with TimescaleDB, pgvector, and pgvectorscale extensions
+  #   # Built from docker/Dockerfile with PG_MAJOR=XX argument
+  #   image: REGISTRY/IMAGE_NAME:pgXX-TAG
+  #
+  # Then in cluster-timescaledb.yaml, change:
+  #   imageCatalogRef:
+  #     major: XX  # Change from 17 to your desired version

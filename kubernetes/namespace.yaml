@@ -1,0 +1,9 @@
+# Kubernetes Namespace for TimescaleDB cluster and related resources
+apiVersion: v1
+kind: Namespace
+metadata:
+  # Namespace name referenced by all other resources (cluster, imagecatalog)
+  name: timescaledb
+  labels:
+    name: timescaledb
+    app: timescaledb-cluster
